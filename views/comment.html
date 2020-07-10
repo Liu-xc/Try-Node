@@ -7,7 +7,7 @@
   <meta name="description" content="">
   <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
   <meta name="generator" content="Jekyll v4.0.1">
-  <title>comments</title>
+  <title>{{ title }}</title>
 
   <link rel="canonical" href="https://v4.bootcss.com/docs/examples/floating-labels/">
 
@@ -35,13 +35,18 @@
 </head>
 
 <body>
-  <form class="form-signin w-50 h-100 m-auto mt-md-5">
+  {{ if failMsg }}
+  <div class="p-3 text-center bg-danger text-dark">{{ failMsg }}</div>
+  {{ /if }}
+  <form class="form-signin w-50 h-100 m-auto mt-md-5" method="POST" action="/{{ title }}">
     <div class="text-center mb-4">
       <h1 class="h3 mb-3 font-weight-normal">Comment</h1>
     </div>
 
     <div class="form-label-group mt-3">
-      <textarea type="text" id="comment" maxlength="200" class="form-control" placeholder="comment" required></textarea>
+      <input type="hidden" name="id" value="{{ id }}">
+      <textarea type="text" name="comment" maxlength="200" class="form-control" placeholder="comment"
+        required>{{ comment }}</textarea>
     </div>
 
     <button class="btn btn-lg btn-primary btn-block w-25 ml-auto mr-auto mt-3" type="submit">Submit</button>

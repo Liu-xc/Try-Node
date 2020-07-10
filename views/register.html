@@ -35,19 +35,21 @@
 </head>
 
 <body>
-  <form class="form-signin w-25 m-auto mt-md-5">
+  {{ if failMsg }}
+  <div class="p-3 text-center bg-warning text-danger">{{ failMsg }}</div>
+  {{ /if }}
+  <form class="form-signin w-25 m-auto mt-md-5" method="POST" action="/register">
     <div class="text-center mb-4">
       <h1 class="h3 mb-3 font-weight-normal">Sign up</h1>
     </div>
 
     <div class="form-label-group">
-      <input type="email" id="username" value="{{username}}" class="form-control" placeholder="Username" required
+      <input type="text" name="username" value="{{username}}" class="form-control" placeholder="Username" required
         autofocus>
     </div>
 
     <div class="form-label-group mt-3">
-      <input type="password" id="inputPassword" value="{{password}}" class="form-control" placeholder="Password"
-        required>
+      <input type="password" name="password" value="{{password}}" class="form-control" placeholder="Password" required>
     </div>
 
     <button class="btn btn-lg btn-primary btn-block mt-3" type="submit">Sign up</button>

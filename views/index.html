@@ -6,54 +6,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>comments</title>
   <link href="/public/css/bootstrap.min.css" rel="stylesheet">
-
+  <style>
+    .btn-group {
+      right: 0;
+    }
+  </style>
 </head>
 
 <body class="bg-light">
-  <div class="bg-dark p-4 text-center h1 text-light">HELLO WORLD</div>
+  <div class="bg-dark p-4 text-center">
+    <div class="container w-75 d-flex align-content-center justify-content-center position-relative">
+      <h1 class="text-light">HELLO WORLD</h1>
+      <div class="btn-group position-absolute d-flex align-items-center h-100">
+        {{ if username}}
+        <a href="/comment" class="btn btn-sm bg-primary">发表评论</a>
+        {{ else }}
+        <a href="/login" class="btn btn-sm bg-primary">登录</a>
+        <a href="/register" class="btn btn-sm bg-info ml-3">注册</a>
+        {{ /if }}
+      </div>
+    </div>
+  </div>
   <h1 class="text-center mt-5">评论区</h1>
   <div class="container w-75 mt-5">
     <ul class="list-unstyled">
-      <li class="d-flex mt-4">
-        <p class="comment-content w-75">comments</p>
+      {{ each commentArr}}
+      <li class="d-flex mt-4 border-bottom border-info px-3 py-1">
+        <p class="comment-content w-75">{{ $value.comment }}</p>
         <div class="info_and_edit w-25 flex-column text-right">
-          <p>username</p>
+          <p>{{ $value.username }}</p>
+          {{ if username && username == $value.username }}
           <div class="edit">
-            <a href="javascript:;">编辑</a>
-            <a href="javascript:;">删除</a>
+            <a href="/edit?id={{ $value._id }}">编辑</a>
+            <a href="/delete?id={{ $value._id }}">删除</a>
           </div>
+          {{ /if }}
         </div>
       </li>
-      <li class="d-flex mt-4">
-        <p class="comment-content w-75">comments</p>
-        <div class="info_and_edit w-25 flex-column text-right">
-          <p>username</p>
-          <div class="edit">
-            <a href="javascript:;">编辑</a>
-            <a href="javascript:;">删除</a>
-          </div>
-        </div>
-      </li>
-      <li class="d-flex mt-4">
-        <p class="comment-content w-75">comments</p>
-        <div class="info_and_edit w-25 flex-column text-right">
-          <p>username</p>
-          <div class="edit">
-            <a href="javascript:;">编辑</a>
-            <a href="javascript:;">删除</a>
-          </div>
-        </div>
-      </li>
-      <li class="d-flex mt-4">
-        <p class="comment-content w-75">comments</p>
-        <div class="info_and_edit w-25 flex-column text-right">
-          <p>username</p>
-          <div class="edit">
-            <a href="javascript:;">编辑</a>
-            <a href="javascript:;">删除</a>
-          </div>
-        </div>
-      </li>
+      {{ /each }}
     </ul>
   </div>
 </body>
