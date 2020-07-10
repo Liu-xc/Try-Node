@@ -12,35 +12,53 @@ const Blog = mongoose.model('Blog', blogSchema)
 
 const router = express.Router()
 
-router.get('/', (req, res)=>{
-  res.render('hello.html', {})
-  let blog = new Blog({name: 'hello', age: 18})
-  Blog.find({name: 'hello', age: 18}, (err, data)=>{
-    if (data) {
-      console.log(data)
-      console.log('数据已存在')
-      return res.end()
-    }
-    blog.save((err, data)=>{
-      if(err){
-        return res.status(500).end('ERROR')
-      } else {
-        console.log('保存数据' + data)
-      }
-    })
-  })
+router.get('/comment', (req, res)=>{
+  res.render('comment.html', {})
+  // let blog = new Blog({name: 'hello', age: 18})
+  // Blog.find({name: 'hello', age: 18}, (err, data)=>{
+  //   if (data) {
+  //     console.log(data)
+  //     console.log('数据已存在')
+  //     return res.end()
+  //   }
+  //   blog.save((err, data)=>{
+  //     if(err){
+  //       return res.status(500).end('ERROR')
+  //     } else {
+  //       console.log('保存数据' + data)
+  //     }
+  //   })
+  // })
   res.end()
 })
 
 router.get('/a', (req, res)=>{
-  Blog.find((err, data)=>{
-    if(err){
-      return res.status(500).send('ERROR')
-    } else {
-      console.log(`data: ${data}`)
-    }
-  })
+  // Blog.find((err, data)=>{
+  //   if(err){
+  //     return res.status(500).send('ERROR')
+  //   } else {
+  //     console.log(`data: ${data}`)
+  //   }
+  // })
   res.end()
+})
+
+router.get('/', (req, res)=>{
+  res.render('index.html', {})
+})
+
+router.get('/login', (req, res)=>{
+  res.render('login.html', {
+    username: 'hello',
+    password: 'world'
+  })
+})
+
+router.get('/register', (req, res)=>{
+  res.render('register.html', {
+    username: 'hello',
+    password: 'world'
+  })
 })
 
 module.exports = router

@@ -5,6 +5,8 @@ const path = require('path')
 const app = express()
 const port = 3000
 
+app.use('/public',express.static(path.join(__dirname, 'public')))
+
 app.engine('html', require('express-art-template'))
 app.set('view options', {
     debug: process.env.NODE_ENV !== 'production'
