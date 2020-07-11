@@ -1,8 +1,6 @@
 const express = require('express')
 const mongoose = require('mongoose');
-
-// 该变量保存当前用户用户名
-var curUsername = ''
+const md5 = require('md5')
 
 mongoose.connect('mongodb://localhost/myapp', {useNewUrlParser: true, useUnifiedTopology: true});
 const Schema = mongoose.Schema
@@ -10,26 +8,50 @@ const userSchema = new Schema({
   username: String,
   password: String
 })
-const commentScheme = new Schema({
+const commentSchema = new Schema({
   username: String,
   comment: String,
   time: Number
 })
 const User = mongoose.model('User', userSchema)
-const Comment = mongoose.model('Comment', commentScheme)
+const Comment = mongoose.model('Comment', commentSchema)
+const Session = mongoose.model('Session', Schema(), 'sessions')
 
 const router = express.Router()
 
 router.get('/', (req, res)=>{
   // 从数据库获取评论
   const commentArr = []
+  const sessionID = `"${req.sessionID}"`
+  const query = Session.where({'session.sessionID': sessionID})
+  let userData = {}
   let failMSg = ''
+  // Session.find((err, data)=>{
+  //   if(!err){
+  //     console.log(data)
+  //     for(let v of data) {
+  //       console.log(typeof v)
+  //       if(JSON.parse(v.session).sessionID === sessionID) {
+  //         userData = v.session.userData
+  //         break
+  //       }
+  //     }
+  //   }
+  // })
+  // Session.findOne(query, (err, data)=>{
+  //   if(err){
+  //     failMsg = '获取数据失败'
+  //   } else if (data) {
+  //     console.log(data)
+  //   }
+  // })
+  userData = req.session.userData
   Comment.find((err, data)=>{
     if(err){
       failMsg = '获取数据失败'
     } else if (data) {
       data.forEach(v=>commentArr.unshift(v))
-      res.render('index.html', {'username': curUsername, 'failMSg': failMSg, 'commentArr': commentArr})
+      res.render('index.html', {'username': userData ? userData.username : '', 'failMSg': failMSg, 'commentArr': commentArr})
     }
   })
 })
@@ -85,6 +107,7 @@ router.get('/edit', (req, res)=>{
 router.post('/login', (req, res)=>{
   // 获取数据，取得的数据的类型为object
   const userData = req.body
+  userData.password = md5(userData.password)
   
   const promise = new Promise((resolve, reject)=>{
     // 查询数据库，如果不存在数据就返回登录界面
@@ -98,7 +121,9 @@ router.post('/login', (req, res)=>{
   }).then(
     resolve=>{
       // 进入登录状态的首页
-      curUsername = userData.username
+      // curUsername = userData.username
+      req.session.userData = Object.assign(userData, resolve)
+      req.session.sessionID = req.sessionID
       res.redirect('/')
     },
     reject=>{
@@ -111,6 +136,7 @@ router.post('/login', (req, res)=>{
 
 router.post('/register', (req, res)=>{
   const userData = req.body
+  userData.password = md5(userData.password)
 
   const promise = new Promise((resolve, reject)=>{
     // 查询数据库
@@ -127,7 +153,8 @@ router.post('/register', (req, res)=>{
           if(err){
             reject(err)
           }
-          curUsername = userData.username
+          // curUsername = userData.username
+          req.session.userData = userData
           res.redirect('/')
         })
       }
@@ -139,13 +166,14 @@ router.post('/register', (req, res)=>{
 })
 
 router.post('/comment', (req, res)=>{
+  const userData = req.session.userData
   // 首先要判断当前是否已经登录了
-  if(!curUsername){
-    res.render('comment.html', {'failMsg': '请登录'})
+  if(!userData.username){
+    return res.render('comment.html', {'failMsg': '请登录'})
   }
   // 获取数据
   const commentData = req.body
-  commentData.username = curUsername
+  commentData.username = userData.username
   commentData.time = Date.now()
 
   const comment = new Comment(commentData)
