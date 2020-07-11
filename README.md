@@ -8,7 +8,8 @@ Try to make a  CRUD web app during learning Node.js
 - MongoDB
 - Art-template
 - Bootstrap
-- (mongoose, nodemon, bodyParser)
+- Express-session
+- (mongoose, nodemon, bodyParser, connect-mongo)
 
 **路由设计**
 
