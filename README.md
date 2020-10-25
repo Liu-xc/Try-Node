@@ -30,3 +30,5 @@ Try to make a  CRUD web app during learning Node.js
 `npm i`
 `mongod --dbpath PATH(d:/software/mongodb)`
 `nodemon app.js`
+模拟用户
+`uname: hello  pass: 123456`
