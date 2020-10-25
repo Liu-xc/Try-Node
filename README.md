@@ -26,3 +26,7 @@ Try to make a  CRUD web app during learning Node.js
 | /edit     | POST     | commentID、comment | 使用ID查询并更新                                             |
 | /delete   | GET      | commentID          | 使用ID删除项                                                 |
 
+**使用方式**
+`npm i`
+`mongod --dbpath PATH(d:/software/mongodb)`
+`nodemon app.js`
